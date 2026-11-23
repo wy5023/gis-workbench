@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: gis-workbench
+    runtime: docker
+    plan: free
+    region: singapore
+    rootDir: Workbench
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /healthz
+    envVars:
+      - key: WORKBENCH_PASSWORD
+        sync: false
+      - key: DATA_DIR
+        value: /data
