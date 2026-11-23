@@ -1,0 +1,6 @@
+Workbench/bin/
+Workbench/obj/
+Workbench/App_Data/
+.vs/
+*.user
+*.suo
