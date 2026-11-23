@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0b0f1a" />
+    <meta name="description" content="个人工作台：待办、课程表、常用链接，随时随地管理你的日程。" />
+    <title>个人工作台</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/css/app.css?v=1" />
+</head>
+<body>
+
+<svg class="sprite" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M2 12h2.4M19.6 12H22M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M19.1 4.9l-1.7 1.7M6.6 17.4l-1.7 1.7"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20.5 14.2A8.6 8.6 0 0 1 9.8 3.5 8.8 8.8 0 1 0 20.5 14.2Z"/></symbol>
+    <symbol id="i-logout" viewBox="0 0 24 24"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3"/><path d="M10 8l-4 4 4 4M6 12h10"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4Z"/><path d="M13.5 6.5l4 4"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6"/><path d="M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12"/><path d="M9 7V4.8A1.8 1.8 0 0 1 10.8 3h2.4A1.8 1.8 0 0 1 15 4.8V7"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M8 3v4M16 3v4M3.5 10h17"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-5.8 7-11a7 7 0 1 0-14 0c0 5.2 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></symbol>
+    <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13.5a4 4 0 0 0 5.7 0l2.8-2.8a4 4 0 1 0-5.7-5.7L11.5 6.3"/><path d="M14 10.5a4 4 0 0 0-5.7 0L5.5 13.3a4 4 0 1 0 5.7 5.7l1.3-1.3"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.6" cy="6" r="1.1"/><circle cx="4.6" cy="12" r="1.1"/><circle cx="4.6" cy="18" r="1.1"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15.5H6.5A2.5 2.5 0 0 0 4 21V5.5Z"/><path d="M4 18.5A2.5 2.5 0 0 1 6.5 16H20"/></symbol>
+</svg>
+
+<div id="loading-bar" class="loading-bar" aria-hidden="true"></div>
+
+<!-- 登录 -->
+<section id="login-view" class="auth-shell" hidden>
+    <div class="auth-glow"></div>
+    <div class="auth-card">
+        <div class="auth-brand">
+            <span class="brand-mark"><svg><use href="#i-grid"/></svg></span>
+            <div>
+                <p class="auth-name">个人工作台</p>
+                <p class="auth-sub">Personal Workbench</p>
+            </div>
+        </div>
+        <h1 class="auth-title">欢迎回来</h1>
+        <p class="auth-desc">输入访问密码，继续管理你的待办与课程安排。</p>
+        <form id="login-form" autocomplete="on">
+            <label class="field">
+                <span class="field-label">访问密码</span>
+                <span class="password-wrap">
+                    <input id="login-password" type="password" name="password" placeholder="请输入密码" autocomplete="current-password" required />
+                    <button type="button" class="eye-btn" id="toggle-password" aria-label="显示密码">
+                        <svg><use href="#i-eye"/></svg>
+                    </button>
+                </span>
+            </label>
+            <p class="form-error" id="login-error" hidden></p>
+            <button class="btn btn-primary btn-block" id="login-submit" type="submit">进入工作台</button>
+        </form>
+        <p class="auth-hint" id="login-hint" hidden>初始密码为 <code>admin123</code>，部署后请通过环境变量 <code>WORKBENCH_PASSWORD</code> 修改。</p>
+    </div>
+    <p class="auth-footer">待办 · 课程表 · 常用链接</p>
+</section>
+
+<!-- 主界面 -->
+<div id="app-view" class="app-shell" hidden>
+    <header class="topbar">
+        <div class="topbar-inner">
+            <div class="brand">
+                <span class="brand-mark"><svg><use href="#i-grid"/></svg></span>
+                <div class="brand-text">
+                    <strong>个人工作台</strong>
+                    <small>Personal Workbench</small>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <div class="clock">
+                    <span id="clock-date" class="clock-date"></span>
+                    <span id="clock-time" class="clock-time"></span>
+                </div>
+                <button class="icon-btn theme-btn" id="theme-toggle" type="button" aria-label="切换主题">
+                    <svg class="ico-sun"><use href="#i-sun"/></svg>
+                    <svg class="ico-moon"><use href="#i-moon"/></svg>
+                </button>
+                <button class="icon-btn" id="logout-btn" type="button" aria-label="退出登录" title="退出登录">
+                    <svg><use href="#i-logout"/></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="page">
+        <section class="greeting">
+            <div class="greeting-text">
+                <p class="eyebrow" id="greet-date">—</p>
+                <h1 id="greeting">你好，欢迎回来</h1>
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <span class="stat-dot dot-todo"></span>
+                    <span class="stat-value" id="stat-todo">0</span>
+                    <span class="stat-label">未完成待办</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-dot dot-course"></span>
+                    <span class="stat-value" id="stat-course">0</span>
+                    <span class="stat-label">今日课程</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-dot dot-link"></span>
+                    <span class="stat-value" id="stat-link">0</span>
+                    <span class="stat-label">常用链接</span>
+                </div>
+            </div>
+        </section>
+
+        <div class="dashboard">
+            <!-- 待办 -->
+            <section class="card todos-card">
+                <div class="card-head">
+                    <div class="card-title">
+                        <span class="card-icon icon-todo"><svg><use href="#i-list"/></svg></span>
+                        <h2>待办清单</h2>
+                        <span class="count-badge" id="todo-count">0</span>
+                    </div>
+                    <div class="card-tools">
+                        <div class="segmented" id="todo-filters" role="tablist">
+                            <button class="seg-btn is-active" data-filter="all" type="button">全部</button>
+                            <button class="seg-btn" data-filter="active" type="button">待办</button>
+                            <button class="seg-btn" data-filter="today" type="button">今天</button>
+                            <button class="seg-btn" data-filter="done" type="button">已完成</button>
+                        </div>
+                        <button class="btn btn-primary btn-sm" id="add-todo" type="button">
+                            <svg><use href="#i-plus"/></svg><span>新建</span>
+                        </button>
+                    </div>
+                </div>
+                <ul class="todo-list" id="todo-list"></ul>
+                <div class="empty" id="todo-empty" hidden>
+                    <div class="empty-art">
+                        <svg viewBox="0 0 120 90" aria-hidden="true">
+                            <rect x="18" y="14" width="84" height="66" rx="12" />
+                            <path d="M34 34h38M34 47h50M34 60h28" />
+                            <circle cx="88" cy="66" r="16" />
+                            <path d="M81 66l5 5 9-10" />
+                        </svg>
+                    </div>
+                    <p class="empty-title">这里空空如也</p>
+                    <p class="empty-desc">新建一条待办，让今天更有条理。</p>
+                </div>
+            </section>
+
+            <!-- 常用链接 -->
+            <section class="card links-card">
+                <div class="card-head">
+                    <div class="card-title">
+                        <span class="card-icon icon-link"><svg><use href="#i-link"/></svg></span>
+                        <h2>常用链接</h2>
+                        <span class="count-badge" id="link-count">0</span>
+                    </div>
+                    <div class="card-tools">
+                        <button class="btn btn-ghost btn-sm" id="add-link" type="button">
+                            <svg><use href="#i-plus"/></svg><span>添加</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="link-grid" id="link-grid"></div>
+            </section>
+
+            <!-- 课程表 -->
+            <section class="card schedule-card">
+                <div class="card-head">
+                    <div class="card-title">
+                        <span class="card-icon icon-course"><svg><use href="#i-calendar"/></svg></span>
+                        <h2>本周课程表</h2>
+                        <span class="count-badge" id="course-count">0</span>
+                    </div>
+                    <div class="card-tools">
+                        <button class="btn btn-primary btn-sm" id="add-course" type="button">
+                            <svg><use href="#i-plus"/></svg><span>添加课程</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="day-tabs" id="day-tabs"></div>
+                <div class="schedule" id="schedule"></div>
+            </section>
+        </div>
+    </main>
+</div>
+
+<!-- 待办弹窗 -->
+<dialog class="modal" id="todo-dialog">
+    <form id="todo-form" class="modal-card">
+        <div class="modal-head">
+            <h3 id="todo-dialog-title">新建待办</h3>
+            <button class="icon-btn" type="button" data-close aria-label="关闭"><svg><use href="#i-close"/></svg></button>
+        </div>
+        <input type="hidden" id="todo-id" />
+        <label class="field">
+            <span class="field-label">标题</span>
+            <input id="todo-title" type="text" maxlength="120" placeholder="要做什么？" required />
+        </label>
+        <label class="field">
+            <span class="field-label">备注 <em>可选</em></span>
+            <textarea id="todo-notes" rows="3" maxlength="600" placeholder="补充说明、链接或验收标准"></textarea>
+        </label>
+        <div class="field-row">
+            <label class="field">
+                <span class="field-label">截止日期 <em>可选</em></span>
+                <input id="todo-due" type="date" />
+            </label>
+            <div class="field">
+                <span class="field-label">优先级</span>
+                <div class="priority-picker" id="priority-picker">
+                    <label><input type="radio" name="priority" value="2" checked /><span class="pri pri-high">高</span></label>
+                    <label><input type="radio" name="priority" value="1" /><span class="pri pri-mid">中</span></label>
+                    <label><input type="radio" name="priority" value="0" /><span class="pri pri-low">低</span></label>
+                </div>
+            </div>
+        </div>
+        <div class="modal-actions">
+            <button class="btn btn-ghost" type="button" data-close>取消</button>
+            <button class="btn btn-primary" type="submit">保存</button>
+        </div>
+    </form>
+</dialog>
+
+<!-- 课程弹窗 -->
+<dialog class="modal" id="course-dialog">
+    <form id="course-form" class="modal-card">
+        <div class="modal-head">
+            <h3 id="course-dialog-title">添加课程</h3>
+            <button class="icon-btn" type="button" data-close aria-label="关闭"><svg><use href="#i-close"/></svg></button>
+        </div>
+        <input type="hidden" id="course-id" />
+        <label class="field">
+            <span class="field-label">课程名称</span>
+            <input id="course-name" type="text" maxlength="60" placeholder="如：遥感原理与应用" required />
+        </label>
+        <div class="field-row">
+            <label class="field">
+                <span class="field-label">教师 <em>可选</em></span>
+                <input id="course-teacher" type="text" maxlength="40" placeholder="任课教师" />
+            </label>
+            <label class="field">
+                <span class="field-label">地点 <em>可选</em></span>
+                <input id="course-location" type="text" maxlength="40" placeholder="如：教三-204" />
+            </label>
+        </div>
+        <div class="field-row">
+            <label class="field">
+                <span class="field-label">星期</span>
+                <select id="course-weekday">
+                    <option value="1">周一</option><option value="2">周二</option><option value="3">周三</option>
+                    <option value="4">周四</option><option value="5">周五</option><option value="6">周六</option>
+                    <option value="7">周日</option>
+                </select>
+            </label>
+            <label class="field">
+                <span class="field-label">周次 <em>可选</em></span>
+                <input id="course-weeks" type="text" maxlength="20" placeholder="如：1-16周" />
+            </label>
+        </div>
+        <div class="field-row">
+            <label class="field">
+                <span class="field-label">开始时间</span>
+                <input id="course-start" type="time" value="08:00" required />
+            </label>
+            <label class="field">
+                <span class="field-label">结束时间</span>
+                <input id="course-end" type="time" value="09:40" required />
+            </label>
+        </div>
+        <div class="field">
+            <span class="field-label">颜色标记</span>
+            <div class="color-picker" id="color-picker"></div>
+        </div>
+        <div class="modal-actions">
+            <button class="btn btn-ghost" type="button" data-close>取消</button>
+            <button class="btn btn-primary" type="submit">保存</button>
+        </div>
+    </form>
+</dialog>
+
+<!-- 链接弹窗 -->
+<dialog class="modal" id="link-dialog">
+    <form id="link-form" class="modal-card">
+        <div class="modal-head">
+            <h3 id="link-dialog-title">添加链接</h3>
+            <button class="icon-btn" type="button" data-close aria-label="关闭"><svg><use href="#i-close"/></svg></button>
+        </div>
+        <input type="hidden" id="link-id" />
+        <label class="field">
+            <span class="field-label">名称</span>
+            <input id="link-title" type="text" maxlength="40" placeholder="如：中国知网" required />
+        </label>
+        <label class="field">
+            <span class="field-label">网址</span>
+            <input id="link-url" type="text" maxlength="300" placeholder="https://example.com" required />
+        </label>
+        <label class="field">
+            <span class="field-label">分类 <em>可选</em></span>
+            <input id="link-category" type="text" maxlength="20" placeholder="如：学习、工具、生活" />
+        </label>
+        <div class="modal-actions">
+            <button class="btn btn-ghost" type="button" data-close>取消</button>
+            <button class="btn btn-primary" type="submit">保存</button>
+        </div>
+    </form>
+</dialog>
+
+<!-- 确认弹窗 -->
+<dialog class="modal modal-sm" id="confirm-dialog">
+    <div class="modal-card">
+        <div class="modal-head">
+            <h3 id="confirm-title">确认删除</h3>
+            <button class="icon-btn" type="button" data-close aria-label="关闭"><svg><use href="#i-close"/></svg></button>
+        </div>
+        <p class="confirm-text" id="confirm-text">删除后无法恢复，确定继续吗？</p>
+        <div class="modal-actions">
+            <button class="btn btn-danger" id="confirm-ok" type="button">删除</button>
+            <button class="btn btn-ghost" type="button" data-close>取消</button>
+        </div>
+    </div>
+</dialog>
+
+<div class="toast-wrap" id="toast-wrap"></div>
+
+<script src="/js/app.js?v=1"></script>
+</body>
+</html>
